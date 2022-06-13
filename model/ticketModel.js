@@ -12,6 +12,11 @@ const dataSchema = new mongoose.Schema({
         required: false,
         type: Date
     },
+    paid: {
+        required: true,
+        type: Boolean,
+        default: false
+    },
 
 })
 

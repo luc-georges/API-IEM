@@ -15,6 +15,10 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: Number
     },
+    totalSlots: {
+        required: true,
+        type: Number
+    },
     price:{
 
             freeLengthInMin:{

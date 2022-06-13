@@ -12,7 +12,7 @@ router.get('/priceCheck/:id', ticket.priceCheck)
 // car arival provide a new ticket
 router.post('/arival', ticket.addNewTicket)
 // car departure , paid ticket
-//router.post('/departure', ticket.ticketPaid)
+router.patch('/departure/:id', ticket.ticketPaid)
 
 
 

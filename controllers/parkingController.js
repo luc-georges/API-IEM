@@ -37,12 +37,13 @@ module.exports = {
         let name = req.body.name, 
             location = req.body.location,
             availableSlots = req.body.availableSlots,
+            totalSlots = req.body.totalSlots,
             price = req.body.price ;
 
         //check if parking already exist
         const foundParking = await parkingModel.find({name:name,location:location})
-        
-        if(foundParking){
+        console.log(foundParking)
+        if(foundParking.length > 0){
             res.status(409).json({message: `${foundParking} already exist in database`})
         }else{
 
@@ -50,6 +51,7 @@ module.exports = {
                 name: name,
                 location: location,
                 availableSlots: availableSlots,
+                totalSlots: totalSlots,
                 price: price
             })
         
@@ -62,7 +64,7 @@ module.exports = {
             }
         }
     },
-    
+
     deleteParking: async (req, res) =>{
         try {
             const id = req.params.id;
