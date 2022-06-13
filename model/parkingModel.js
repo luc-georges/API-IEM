@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
 
 
-//Parking Model décrivant le schema utilisé pour l'ajout ou la modification d'un parking
+//Parking Model
+//name: name of the place
+//location: address of the parking
+//availableSlots: number of remaining slots
+//totalSlots: nomber of total Slots built in the parking
+//freeLengthInMin: time length where the parking is free 
+//pricePerHour: price the customer will have to pay once the free periode is expired
+
 const dataSchema = new mongoose.Schema({
     name: {
         required: true,
@@ -20,15 +27,14 @@ const dataSchema = new mongoose.Schema({
         type: Number
     },
     price:{
-
-            freeLengthInMin:{
-                required: true,
-                type: Number
-            },
-            pricePerHour:{
-                required:true,
-                type: Number
-            }
+        freeLengthInMin:{
+            required: true,
+            type: Number
+        },
+        pricePerHour:{
+            required:true,
+            type: Number
+        }
 
     }
 })

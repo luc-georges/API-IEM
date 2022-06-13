@@ -48,7 +48,7 @@ module.exports = {
 
         //check if parking already exist
         const foundParking = await parkingModel.find({name:name,location:location})
-        console.log(foundParking)
+
         if(foundParking.length > 0){
             res.status(409).json({message: `${foundParking} already exist in database`})
         }else{
