@@ -2,7 +2,9 @@
 const parkingModel = require('../model/parkingModel')
 const ticketModel = require('../model/ticketModel')
 module.exports = {
-
+    // route GET ticket/all  
+    // fetch all data from tickets
+    // return a list of tickets document
     getAll: async (req, res) => {
     try{
         let data = await ticketModel.find();
@@ -15,10 +17,12 @@ module.exports = {
         res.status(500).json({message: error.message})
     }
     },
-
+    // route GET ticket/:ticketID  
+    // fetch specific ticket by id
+    // return the whole ticket object
     getByID: async (req, res) => {
         try{
-            const data = await ticketModel.findById(req.params.id);
+            const data = await ticketModel.findById(req.params.ticketID);
             if(!data){
 
                 res.status(404).json({message: "No ticket found"})
@@ -32,34 +36,32 @@ module.exports = {
             res.status(500).json({message: error.message})
         }
     },
+    // route GET ticket/priceCheck/:ticketID  
+    // fetch specific ticket by id
+    // return the price to pay
     priceCheck: async (req, res) => {
         try{
-            //récupération des datas du ticket 
-            const dataTicket = await ticketModel.findById(req.params.id);
-            console.log(dataTicket)
+
+            const dataTicket = await ticketModel.findById(req.params.ticketID);
+
             if(!dataTicket){
 
                 res.status(404).json({message: "No ticket found"})
 
             }else{
-                 //récupération des datas du parking lié au ticket
+
                 const parkingfound = await parkingModel.findById(dataTicket._ParkingID);
 
-                 // calcule du prix par rapport au temps résté
+                 // calculate price depending on the length of the stay
                 let ticketStart = dataTicket.arival
                 let now = new Date();
                 let diff = Math.abs(ticketStart - now);
                 var minutes = Math.floor((diff/1000)/60);
                 let payingHours = minutes - parkingfound.price.freeLengthInMin +1 ;
-                console.log(parkingfound)
-                console.log(minutes)
-                console.log(payingHours)
-
                 payingHours = Math.ceil(payingHours / 60) 
-                console.log(payingHours)
                 payingHours *= parkingfound.price.pricePerHour
 
-                //envoie du prix à payer
+                //send price to pay
                 res.json({message:`Price to pay: ${payingHours} €`})
             }
         }
@@ -67,6 +69,10 @@ module.exports = {
             res.status(500).json({message: error.message})
         }
     },
+    // route POST ticket/arival
+    // create a new ticket 
+    // reduce "availableSlots" from the linked parking by 1
+    // return the whole ticket object
     addNewTicket: async (req, res) =>{
         try {
 
@@ -101,38 +107,42 @@ module.exports = {
             }
         
         },
+
+    // route PATCH ticket/departure/:ticketID
+    // fetch specific ticket by id
+    // set "paid" to true
+    // raise "availableSlots" from the linked parking by 1
+    // return a "message" with a goodbye sentence
     ticketPaid: async (req, res) => {
         try{
-            //récupération des datas du ticket 
-            const id = req.params.id
+
+            const id = req.params.ticketID
             const updatedData = req.body
             const options = { new: true };
             const foundTicket = await ticketModel.findById(id);
 
-            
-            
             if(!foundTicket){
 
                 res.status(404).json({message: "No ticket found"})
 
             }else if(foundTicket.paid){
+
                 res.status(403).json({message: "This ticket has already been redeemed , you cheecky one ..."})
 
             }else{
+
                 const dataTicket = await ticketModel.findByIdAndUpdate(id, updatedData, options);
-                 //récupération des datas du parking lié au ticket
+                // fetch linked parking
                 const parkingfound = await parkingModel.findById(dataTicket._ParkingID);
-                console.log(parkingfound)
+                // modify availability
                 let newAvailable = parkingfound.availableSlots +=1
                 parkingfound.availableSlots = newAvailable
                 parkingfound.save()
 
-                //envoie du prix à payer
                 res.json({message:"Hope to see you again !"})
             }
         }
         catch(error){
-            console.log(error)
             res.status(500).json({message: error.message})
         }
     },

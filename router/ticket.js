@@ -8,7 +8,7 @@ router.get('/all',ticket.getAll)
 //get parking by ID
 router.get('/:id', ticket.getByID)
 //ticket price check
-router.get('/priceCheck/:id', ticket.priceCheck)
+router.get('/priceCheck/:ticketID', ticket.priceCheck)
 // car arival provide a new ticket
 router.post('/arival', ticket.addNewTicket)
 // car departure , paid ticket

@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-//Ticket Model décrivant le schema utilisé pour l'ajout ou la modification d'un ticket
+//Parking Model
+//_ParkingID: Id of the parking linked to the ticket
+//arival: Date the ticket is provided
+//departure: Date the ticket has been paid
+//paid: true if the ticket have been paid
 
 const dataSchema = new mongoose.Schema({
     _ParkingID: mongoose.Schema.Types.ObjectID,

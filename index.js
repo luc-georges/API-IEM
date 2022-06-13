@@ -19,12 +19,12 @@ app.use(cors())
 app.use(express.json());
 
 
+//router
 app.use('/parking', parkingRouter); 
 app.use('/ticket', ticketRouter); 
 
 
-
-
+//Database connection check
 database.on('error', (error) => {
     console.log(error)
 })

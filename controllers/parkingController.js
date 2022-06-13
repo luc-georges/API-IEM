@@ -2,20 +2,24 @@
 const parkingModel = require('../model/parkingModel')
 
 module.exports = {
-
+    // route GET parking/all  
+    // fetch all data from parkings
+    // return a list of parkings document
     getAll: async (req, res) => {
     try{
-        let data = await parkingModel.find();
-        if(data.length === 0){
+        let parkings = await parkingModel.find();
+        if(parkings.length === 0){
             res.status(404).json({message: "No parking found"})
         }else{
-            res.json(data)
+            res.json(parkings)
         }
     }catch(error){
         res.status(500).json({message: error.message})
     }
     },
-
+    // route GET parking/:id  
+    // fetch specific parking by id
+    // return the whole parking object
     getByID: async (req, res) => {
         try{
             const data = await parkingModel.findById(req.params.id);
@@ -32,7 +36,9 @@ module.exports = {
             res.status(500).json({message: error.message})
         }
     },
-
+    // route POST parking/add  
+    // insert a new parking in DB
+    // return the whole parking object
     addNewParking: async (req, res) =>{
         let name = req.body.name, 
             location = req.body.location,
@@ -64,7 +70,9 @@ module.exports = {
             }
         }
     },
-
+    // route DELETE parking/remove/:id  
+    // fetch specific parking by id and delete it
+    // return a massage as json object containing the deleted document name 
     deleteParking: async (req, res) =>{
         try {
             const id = req.params.id;
