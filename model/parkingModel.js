@@ -16,8 +16,7 @@ const dataSchema = new mongoose.Schema({
         type: Number
     },
     price:{
-        type: Map,
-        of: new mongoose.Schema({
+
             freeLengthInMin:{
                 required: true,
                 type: Number
@@ -26,8 +25,8 @@ const dataSchema = new mongoose.Schema({
                 required:true,
                 type: Number
             }
-        }) 
+
     }
 })
 
-module.exports = mongoose.model('Data', dataSchema)
+module.exports = mongoose.model('Parking', dataSchema)
