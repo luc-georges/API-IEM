@@ -8,34 +8,38 @@ module.exports = {
     getAll: async () => {
     try{
 
-        let parkings = await ticketModel.find();
+        let tickets = await ticketModel.find();
 
-        if(parkings.length === 0){
-            return {success: false,status:404, error: "No ticket found"};
+        if(tickets.length === 0){
+            return {success: false,status:404, body: "No ticket found", error: "No ticket found"};
+
         }else{
-            return {success: true, body: parkings};
+            return {success: true, status:200, body: tickets, error:null};
+
         }
     }catch(error){
-        return {success: false, status:500, error: "something broke"};
+        return {success: false, status:500, body: "something broke", error:error};
     }
     },
-    // route GET ticket/:ticketID  
+
     // fetch specific ticket by id
     // return the whole ticket object
     getByID: async (ticketID) => {
         try{
             const data = await ticketModel.findById(ticketID);
             if(!data){
-                return {success: false,status:404, error: "No ticket found"};
+                return {success: false,status:404, body: "No ticket found", error: "No ticket found"};
+
             }else{
-                return {success: true, body: data};
+                return {success: true, status:200, body: data, error:null};
+
             }
         }
         catch(error){
-            return {success: false, status:500, error: "something broke"}
+            return {success: false, status:500, body: "something broke", error:error};
         }
     },
-    // route GET ticket/priceCheck/:ticketID  
+
     // fetch specific ticket by id
     // return the price to pay
     priceCheck: async (ticketID) => {
@@ -45,7 +49,8 @@ module.exports = {
 
             if(!dataTicket){
 
-                return {success: false,status:404, error: "No ticket found"};
+                return {success: false,status:404, body: "No ticket found", error: "No ticket found"};
+
 
             }else{
 
@@ -61,15 +66,15 @@ module.exports = {
                 payingHours *= parkingfound.price.pricePerHour
 
                 //send price to pay
-                return {success: true, body: `Price to pay: ${payingHours} €`};
+                return {success: true, status:200, body: `Price to pay: ${payingHours} €`, error:null};
            
             }
         }
         catch(error){
-            return {success: false, status:500, error: "something broke"}
+            return {success: false, status:500, body: "something broke", error:error};
         }
     },
-    // route POST ticket/arival
+
     // create a new ticket 
     // reduce "availableSlots" from the linked parking by 1
     // return the whole ticket object
@@ -81,11 +86,12 @@ module.exports = {
 
 
         if(!parkingfound){
-            return {success: false,status:404, error: "Parking not found"};
+            return {success: false,status:404, body: "No parking found", error: "No parking found"};
+
 
         }
         else if(availableSlots <=0 && parkingfound){
-            return {success: true, body: "Parking is full"};
+            return {success: true,status:200, body: "Parking is full", error:null};
 
         }else{
 
@@ -99,18 +105,18 @@ module.exports = {
         
          
                 const dataToSave = await data.save();
-                return {success: true, body: dataToSave};
+                return {success: true, status:200, body: dataToSave, error:null};
 
             }
         }
             catch (error) {
-                return {success: false, status:500, error: "something broke"}
+                return {success: false, status:500, body: "something broke", error:error};
 
             }
         
         },
 
-    // route PATCH ticket/departure/:ticketID
+
     // fetch specific ticket by id
     // set "paid" to true
     // raise "availableSlots" from the linked parking by 1
@@ -123,12 +129,12 @@ module.exports = {
 
             if(!foundTicket){
 
-                return {success: false,status:404, error: "Parking not found"};
+                return {success: false,status:404, body: "ticket not found", error: "ticket not found"};
 
 
             }else if(foundTicket.paid){
 
-                return {success: false,status:403, error: "This ticket has already been redeemed , you cheecky one ..."};
+                return {success: false,status:403, body: "This ticket has already been redeemed , you cheecky one ...", error: "Ticket already paid"};
 
             }else{
 
@@ -139,13 +145,15 @@ module.exports = {
                 let newAvailable = parkingfound.availableSlots +=1
                 parkingfound.availableSlots = newAvailable
                 parkingfound.save()
-                return {success: true, body: "Hope to see you again !"};
+
+                
+                return {success: true,status:200, body: "Hope to see you again !", error:null};
 
             }
         }
         catch(error){
 
-            return {success: false,status:500, error: "something broke"};
+            return {success: false, status:500, body: "something broke", error:error};
 
         }
     },

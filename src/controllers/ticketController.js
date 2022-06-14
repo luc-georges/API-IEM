@@ -9,11 +9,9 @@ module.exports = {
 
         let tickets = await ticketService.getAll()
 
-        if(tickets.success){
-            res.json(tickets)
-        }else{
-            res.status(tickets.status).json(tickets.error)
-        }
+
+        res.status(tickets.status).json(tickets.body)
+  
 
     }catch(error){
 
@@ -29,12 +27,10 @@ module.exports = {
             const ticketID = req.params.ticketID
 
             const ticket = await ticketService.getByID(ticketID);
-            if(ticket.success){
-                res.json(ticket)
-            }else{
-                res.status(ticket.status).json(ticket.error)
 
-            }
+            res.status(ticket.status).json(ticket.body)
+
+            
         }
         catch(error){
             res.status(500).json({message: error.message})
@@ -47,12 +43,9 @@ module.exports = {
             const ticketID = req.params.ticketID;
             const dataTicket = await ticketService.priceCheck(ticketID);
 
-            if(dataTicket.success){
-                res.json(dataTicket)
-                
-            }else{
-                res.status(dataTicket.status).json(dataTicket.error)
-            }
+
+            res.status(dataTicket.status).json(dataTicket.body)
+            
         }
         catch(error){
             res.status(500).json({message: error.message})
@@ -66,16 +59,12 @@ module.exports = {
         let _ParkingID = req.body._ParkingID ;
         const data = await ticketService.addNewTicket(_ParkingID);
 
-        if(data.success){
-            res.json(data)
 
-        }
-        else{
-                res.status(data.status).json(data.error)
-            }
+            res.status(data.status).json(data.body)
+            
         }
             catch (error) {
-                res.status(500).json({message: error.message})
+            res.status(500).json({message: error.message})
             }
         
         },
@@ -90,15 +79,10 @@ module.exports = {
 
             const data = await ticketService.ticketPaid(id,updatedData);
 
-            if(data.success){
 
-                res.json(data)
+            res.status(data.status).json(data.body)
 
-            }else{
-
-                res.status(data.status).json(data.error)
-
-            }
+            
         }
         catch(error){
             res.status(500).json({message: error.message})
