@@ -1,52 +1,51 @@
 
-const parkingModel = require('../model/parkingModel')
-const ticketModel = require('../model/ticketModel')
+const parkingModel = require('../models/parkingModel')
+const ticketModel = require('../models/ticketModel')
+
 module.exports = {
-    // route GET ticket/all  
     // fetch all data from tickets
     // return a list of tickets document
-    getAll: async (req, res) => {
+    getAll: async () => {
     try{
-        let data = await ticketModel.find();
-        if(data.length === 0){
-            res.status(404).json({message: "No parking found"})
+
+        let parkings = await ticketModel.find();
+
+        if(parkings.length === 0){
+            return {success: false,status:404, error: "No ticket found"};
         }else{
-            res.json(data)
+            return {success: true, body: parkings};
         }
     }catch(error){
-        res.status(500).json({message: error.message})
+        return {success: false, status:500, error: "something broke"};
     }
     },
     // route GET ticket/:ticketID  
     // fetch specific ticket by id
     // return the whole ticket object
-    getByID: async (req, res) => {
+    getByID: async (ticketID) => {
         try{
-            const data = await ticketModel.findById(req.params.ticketID);
+            const data = await ticketModel.findById(ticketID);
             if(!data){
-
-                res.status(404).json({message: "No ticket found"})
-
+                return {success: false,status:404, error: "No ticket found"};
             }else{
-
-                res.json(data)
+                return {success: true, body: data};
             }
         }
         catch(error){
-            res.status(500).json({message: error.message})
+            return {success: false, status:500, error: "something broke"}
         }
     },
     // route GET ticket/priceCheck/:ticketID  
     // fetch specific ticket by id
     // return the price to pay
-    priceCheck: async (req, res) => {
+    priceCheck: async (ticketID) => {
         try{
 
-            const dataTicket = await ticketModel.findById(req.params.ticketID);
+            const dataTicket = await ticketModel.findById(ticketID);
 
             if(!dataTicket){
 
-                res.status(404).json({message: "No ticket found"})
+                return {success: false,status:404, error: "No ticket found"};
 
             }else{
 
@@ -62,31 +61,32 @@ module.exports = {
                 payingHours *= parkingfound.price.pricePerHour
 
                 //send price to pay
-                res.json({message:`Price to pay: ${payingHours} €`})
+                return {success: true, body: `Price to pay: ${payingHours} €`};
+           
             }
         }
         catch(error){
-            res.status(500).json({message: error.message})
+            return {success: false, status:500, error: "something broke"}
         }
     },
     // route POST ticket/arival
     // create a new ticket 
     // reduce "availableSlots" from the linked parking by 1
     // return the whole ticket object
-    addNewTicket: async (req, res) =>{
+    addNewTicket: async (_ParkingID) =>{
         try {
 
-        let _ParkingID = req.body._ParkingID ;
         const parkingfound = await parkingModel.findById(_ParkingID);
         let availableSlots = parkingfound.availableSlots
 
 
         if(!parkingfound){
-            res.status(404).json({message:"Parking not found"})
+            return {success: false,status:404, error: "Parking not found"};
 
         }
         else if(availableSlots <=0 && parkingfound){
-            res.status(200).json({message:"Parking is full"})
+            return {success: true, body: "Parking is full"};
+
         }else{
 
             let newAvailable = parkingfound.availableSlots -=1
@@ -99,11 +99,13 @@ module.exports = {
         
          
                 const dataToSave = await data.save();
-                res.status(200).json(dataToSave)
+                return {success: true, body: dataToSave};
+
             }
         }
             catch (error) {
-                res.status(400).json({message: error.message})
+                return {success: false, status:500, error: "something broke"}
+
             }
         
         },
@@ -113,21 +115,20 @@ module.exports = {
     // set "paid" to true
     // raise "availableSlots" from the linked parking by 1
     // return a "message" with a goodbye sentence
-    ticketPaid: async (req, res) => {
+    ticketPaid: async (id, updatedData) => {
         try{
 
-            const id = req.params.ticketID
-            const updatedData = req.body
             const options = { new: true };
             const foundTicket = await ticketModel.findById(id);
 
             if(!foundTicket){
 
-                res.status(404).json({message: "No ticket found"})
+                return {success: false,status:404, error: "Parking not found"};
+
 
             }else if(foundTicket.paid){
 
-                res.status(403).json({message: "This ticket has already been redeemed , you cheecky one ..."})
+                return {success: false,status:403, error: "This ticket has already been redeemed , you cheecky one ..."};
 
             }else{
 
@@ -138,12 +139,14 @@ module.exports = {
                 let newAvailable = parkingfound.availableSlots +=1
                 parkingfound.availableSlots = newAvailable
                 parkingfound.save()
+                return {success: true, body: "Hope to see you again !"};
 
-                res.json({message:"Hope to see you again !"})
             }
         }
         catch(error){
-            res.status(500).json({message: error.message})
+
+            return {success: false,status:500, error: "something broke"};
+
         }
     },
     

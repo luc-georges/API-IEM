@@ -1,5 +1,5 @@
 
-const parkingModel = require('../model/parkingModel')
+const parkingModel = require('../models/parkingModel')
 
 module.exports = {
     // route GET parking/all  
