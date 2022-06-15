@@ -3,6 +3,7 @@ const express = require('express');
 
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const helmet = require('helmet');
 //Routers
 const parkingRouter = require('../router/parking')
 const ticketRouter = require('../router/ticket')
@@ -13,6 +14,7 @@ const auth = require('../middlewares/BasicAuth')
 module.exports = async ({ app }) => {
 
     app.use(cors());
+    app.use(helmet())
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(auth)

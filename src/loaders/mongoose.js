@@ -1,6 +1,19 @@
 
 const mongoose = require('mongoose')
-module.exports = async () => {
-  const connection = await mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
-  return connection.connection.db;
+
+function connect(){
+    return new Promise((resolve, reject) =>{
+        mongoose.connect(process.env.DATABASE_URL,
+            { useNewUrlParser: true }).then((res,err)=>{
+                if(err) return reject(err);
+                resolve();
+            })
+    })
 }
+
+
+function close (){
+    return mongoose.disconnect()
+}
+
+module.exports = {connect, close}
