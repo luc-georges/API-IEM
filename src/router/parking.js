@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const parking = require('../controllers/parkingController');
+const parkingController = require('../controllers/parkingController');
 
 //get all parkings
-router.get('/all',parking.getAll)
+router.get('/all',parkingController.getAll)
 //get parking by ID
-router.get('/:id', parking.getByID)
+router.get('/:id', parkingController.getByID)
 // add a new parking
-router.post('/add', parking.addNewParking)
+router.post('/add', parkingController.addNewParking)
 //remove a parking by ID
-router.delete('/remove/:id', parking.deleteParking)
+router.delete('/remove/:id', parkingController.deleteParking)
 
 
 module.exports = router

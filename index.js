@@ -1,29 +1,21 @@
 require('dotenv').config({ path: './src/config/.env' });
-const cors = require('cors');
+const loaders = require('./src//loaders')
 const express = require('express');
 
-//MongoDB connection
-const mongoose = require('mongoose');
-const mongoURL = process.env.DATABASE_URL;
-mongoose.connect(mongoURL);
-const database = mongoose.connection;
+async function startServer() {
 
-//Routers
-const parkingRouter = require('./src/router/parking')
-const ticketRouter = require('./src/router/ticket')
+  const app = express();
 
+  await loaders({ expressApp: app });
 
+  app.listen(process.env.PORT, err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(`Your server is ready !`);
+  });
+}
 
-const app = express();
-app.use(cors())
-app.use(express.json());
-
-
-//router
-app.use('/parking', parkingRouter); 
-app.use('/ticket', ticketRouter); 
-
-
-
-app.listen(process.env.PORT || 8080);
+startServer();
 
