@@ -1,5 +1,5 @@
 require('dotenv').config({ path: './src/config/.env' });
-const loaders = require('./src//loaders')
+const loaders = require('./src/loaders')
 const express = require('express');
 
 async function startServer() {
@@ -18,4 +18,3 @@ async function startServer() {
 }
 
 startServer();
-
