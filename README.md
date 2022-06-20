@@ -16,6 +16,7 @@ $ npm install
 ## Env variable
 here is my setup for the environment variable, the database is's a temporary core created on mongodb Atlas, it will be deleted after so i can share it here.
 
+fichier .env a créer dans "/src/config"
 ```bash
 NODE_ENV=dev
 PORT = 8080
