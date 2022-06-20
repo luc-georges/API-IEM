@@ -14,7 +14,7 @@ $ npm install
 ```
 
 ## Env variable
-here is my setup for the environment variable, it's a temporary core created on mongodb Atlas, it will be deleted after so i can share it here.
+here is my setup for the environment variable, the database is's a temporary core created on mongodb Atlas, it will be deleted after so i can share it here.
 
 ```bash
 NODE_ENV=dev
@@ -26,17 +26,14 @@ BASIC_API_KEY="Basic 11edd183-df97-4b78-b18d-8b36d56cb6a6"
 ## Running the app
 This API is hosted on heroku so it can be accessed from insomnia or postman from the following address (using the basic api key above):
 
+
 ```bash
 https://lucparking.herokuapp.com/
-
 ```
 
-
+To run it locally:
 ```bash
-
 $ npm run start
-
-
 ```
 
 
