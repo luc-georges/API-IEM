@@ -24,6 +24,13 @@ BASIC_API_KEY="Basic 11edd183-df97-4b78-b18d-8b36d56cb6a6"
 ```
 
 ## Running the app
+This API is hosted on heroku so it can be accessed from insomnia or postman from the following address (using the basic api key above):
+
+```bash
+https://lucparking.herokuapp.com/
+
+```
+
 
 ```bash
 
